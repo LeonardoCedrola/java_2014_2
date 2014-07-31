@@ -77,7 +77,16 @@ public class BloquetoBBConvenio4 extends BloquetoBBImpl implements BloquetoBB {
 			String contaCorrenteRelacionamentoSemDV, String tipoCarteira)
 			throws ManagerException {
 
-		//TODO: INICIALIZAR DADOS
+		this.codigoBanco = codigoBanco;
+		this.codigoMoeda = codigoMoeda;
+		this.dataVencimento = dataVencimento;
+		this.valor = valor;
+		this.numeroConvenioBanco = numeroConvenioBanco;
+		this.complementoNumeroConvenioBancoSemDV = complementoNumeroConvenioBancoSemDV;
+		this.numeroAgenciaRelacionamento = numeroAgenciaRelacionamento;
+		this.contaCorrenteRelacionamentoSemDV = contaCorrenteRelacionamentoSemDV;
+		this.tipoCarteira = tipoCarteira;
+		this.dataBase = dataBase;
 
 		validaDados();
 
@@ -101,11 +110,14 @@ public class BloquetoBBConvenio4 extends BloquetoBBImpl implements BloquetoBB {
 		StringBuilder buffer = new StringBuilder();
 		buffer.append(codigoBanco);
 		buffer.append(codigoMoeda);
+		buffer.append(dataVencimento);
+		buffer.append(getValorFormatado());
+		buffer.append(numeroConvenioBanco);
+		buffer.append(complementoNumeroConvenioBancoSemDV);
+		buffer.append(numeroAgenciaRelacionamento);
+		buffer.append(contaCorrenteRelacionamentoSemDV);
+		buffer.append(tipoCarteira);
 	    
-		//TODO: COMPLETAR
-		
-		
-		
 		return buffer.toString();
 	}
 
@@ -115,8 +127,21 @@ public class BloquetoBBConvenio4 extends BloquetoBBImpl implements BloquetoBB {
 		init();
 
 		StringBuilder buffer = new StringBuilder();
+		buffer.append(codigoBanco); //Campo 01-03 (03)
+		buffer.append(codigoMoeda); //Campo 04-04 (01)
+		buffer.append(digitoVerificadorCodigoBarras(getCodigoBarrasSemDigito()));
 		
-		//TODO: COMPLETAR
+		buffer.append(dataVencimento); //Campo 06-09 (04)
+		buffer.append(getValorFormatado()); //Campo 10-19 (10)
+		buffer.append(numeroConvenioBanco); //Campo 20-23 (04)
+		
+		buffer.append(complementoNumeroConvenioBancoSemDV); //Campo 24-30 (07)
+		buffer.append(numeroAgenciaRelacionamento); //Campo 31-34 (04)
+		buffer.append(contaCorrenteRelacionamentoSemDV); //Campo 35-42 (08)
+		buffer.append(tipoCarteira); //Campo 43-44 (02)
+		
+		
+		
 		
 
 		return buffer.toString();

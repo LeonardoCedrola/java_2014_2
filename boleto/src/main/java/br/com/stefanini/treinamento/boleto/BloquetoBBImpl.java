@@ -52,7 +52,11 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected String getValorFormatado() {
-
+		/* Este metodo pega o valor decimal e arredonda para 2 decimais,
+		 * para ter no final da linha digitavel
+		 * 8 inteiros e 2 decimais, no valor do boleto e no codigo de barras.
+		 */
+		
 		// TODO: Explicar o que este método está fazendo
 		return String.format(
 				"%010d",
@@ -176,7 +180,9 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 */
 	protected static long diferencaEmDias(Date dataInicial, Date dataFinal) {
 
-		// TODO: Estude a Math e escreva aqui o que este método está fazendo
+		/*Pega (data final - data inicial) que divide pelo numero
+		 * 86400000D que seria 1 dia. E descobre quantos dias terá.
+		*/
 
 		return Math
 				.round((dataFinal.getTime() - dataInicial.getTime()) / 86400000D);
