@@ -30,9 +30,6 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	protected void setFatorVencimento() {
 
 		long dias = diferencaEmDias(dataBase, dataVencimento);
-
-		// TODO: EXPLICAR O QUE ESTE MÉTODO ESTÁ FAZENDO
-
 		fatorVencimento = String.format("%04d", dias);
 
 	}
@@ -52,12 +49,11 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected String getValorFormatado() {
-		/* Este metodo pega o valor decimal e arredonda para 2 decimais,
-		 * para ter no final da linha digitavel
-		 * 8 inteiros e 2 decimais, no valor do boleto e no codigo de barras.
+		/*
+		 * Este metodo pega o valor decimal e arredonda para 2 decimais, para
+		 * ter no final da linha digitavel 8 inteiros e 2 decimais, no valor do
+		 * boleto e no codigo de barras.
 		 */
-		
-		// TODO: Explicar o que este método está fazendo
 		return String.format(
 				"%010d",
 				Long.valueOf(valor.setScale(2, RoundingMode.HALF_UP).toString()
@@ -86,8 +82,10 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	private String ldCampo5() {
-		// TODO: COMPLETAR
-		return "";
+		StringBuilder buffer = new StringBuilder();
+		buffer.append(fatorVencimento);
+		buffer.append(getValorFormatado());
+		return buffer.toString();
 	}
 
 	/**
@@ -96,8 +94,8 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	private String ldCampo4() {
-		// TODO: COMPLETAR
-		return "";
+		return String
+				.valueOf(digitoVerificadorCodigoBarras(getCodigoBarrasSemDigito()));
 	}
 
 	/**
@@ -106,9 +104,13 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	private String ldCampo3() {
-
-		// TODO: COMPLETAR
-		return "";
+		return String.format("%s.%s", getCodigoBarras().substring(34, 39), // FAZER
+																			// EM
+																			// CASA,
+																			// JUNTAR
+																			// AS
+																			// DUAS...
+				getCodigoBarras().substring(39, 44));
 	}
 
 	/**
@@ -117,9 +119,13 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	private String ldCampo2() {
-		// TODO: COMPLETAR
-
-		return "";
+		return String.format("%s.%s", getCodigoBarras().substring(24, 29), // FAZER
+																			// EM
+																			// CASA,
+																			// JUNTAR
+																			// AS
+																			// DUAS...
+				getCodigoBarras().substring(29, 34));
 	}
 
 	/**
@@ -129,7 +135,14 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected int digitoVerificadorPorCampo(String campo, boolean valor) {
-		// TODO: COMPLETAR
+		/*campo = campo.replace(".", "");
+		int soma = 0;
+		int resultado = 0;
+		for (char numero : campo.toCharArray()) {
+			resultado = Character.getNumericValue(numero) * (valor ? 2 : 1);
+			soma += resultado <= ? resultado : (resultado -10) + 1;
+			valor = !valor;
+		}*/
 
 		return 0;
 	}
@@ -142,6 +155,7 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 */
 	protected int digitoVerificadorCodigoBarras(String codigoBarras) {
 		// TODO: COMPLETAR
+
 		return 0;
 	}
 
@@ -154,7 +168,9 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 */
 	private String ldCampo1() {
 		StringBuilder buffer = new StringBuilder();
-		// TODO: COMPLETAR
+		buffer.append(codigoBanco);
+		buffer.append(codigoMoeda);
+		buffer.append(getLDNumeroConvenio());
 		return buffer.toString();
 
 	}
@@ -164,7 +180,20 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 		init();
 
 		StringBuilder buffer = new StringBuilder();
-		// TODO: COMPLETAR
+		buffer.append(ldCampo1());
+		buffer.append(digitoVerificadorPorCampo(ldCampo1(), true));
+		buffer.append(" ");
+
+		buffer.append(ldCampo2());
+		buffer.append(digitoVerificadorPorCampo(ldCampo2(), false));
+		buffer.append(" ");
+		buffer.append(ldCampo3());
+		buffer.append(digitoVerificadorPorCampo(ldCampo3(), false));
+		buffer.append(" ");
+
+		buffer.append(ldCampo4());
+		buffer.append(" ");
+		buffer.append(ldCampo5());
 
 		return buffer.toString();
 	}
@@ -180,9 +209,10 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 */
 	protected static long diferencaEmDias(Date dataInicial, Date dataFinal) {
 
-		/*Pega (data final - data inicial) que divide pelo numero
-		 * 86400000D que seria 1 dia. E descobre quantos dias terá.
-		*/
+		/*
+		 * Pega (data final - data inicial) que divide pelo numero 86400000D que
+		 * seria 1 dia. E descobre quantos dias terá.
+		 */
 
 		return Math
 				.round((dataFinal.getTime() - dataInicial.getTime()) / 86400000D);
