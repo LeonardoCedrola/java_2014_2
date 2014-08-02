@@ -146,7 +146,7 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 
 		int proximaDezena = ((soma / 10) + 1) * 10;
 		
-		int dvCampo = (proximaDezena - (proximaDezena - 10 + soma % soma));
+		int dvCampo = (proximaDezena - (proximaDezena - 10 + soma %10));
 		
 		if (dvCampo >= 10){
 			return 1;
