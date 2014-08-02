@@ -135,16 +135,24 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected int digitoVerificadorPorCampo(String campo, boolean valor) {
-		/*campo = campo.replace(".", "");
+		campo = campo.replace(".", "");
 		int soma = 0;
 		int resultado = 0;
 		for (char numero : campo.toCharArray()) {
 			resultado = Character.getNumericValue(numero) * (valor ? 2 : 1);
-			soma += resultado <= ? resultado : (resultado -10) + 1;
+			soma += resultado <= 9 ? resultado : (resultado - 10) + 1;
 			valor = !valor;
-		}*/
+		}
 
-		return 0;
+		int proximaDezena = ((soma / 10) + 1) * 10;
+		
+		int dvCampo = (proximaDezena - (proximaDezena - 10 + soma % soma));
+		
+		if (dvCampo >= 10){
+			return 1;
+		}
+
+		return dvCampo;
 	}
 
 	/**
