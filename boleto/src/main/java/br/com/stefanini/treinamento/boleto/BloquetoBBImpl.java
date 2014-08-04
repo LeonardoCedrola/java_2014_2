@@ -135,24 +135,38 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected int digitoVerificadorPorCampo(String campo, boolean valor) {
-		campo = campo.replace(".", "");
-		int soma = 0;
-		int resultado = 0;
-		for (char numero : campo.toCharArray()) {
-			resultado = Character.getNumericValue(numero) * (valor ? 2 : 1);
-			soma += resultado <= 9 ? resultado : (resultado - 10) + 1;
-			valor = !valor;
+		String str = campo.replace(".", "");
+		int soma = 0, val = 2, dv = 0;
+
+		for (int i = str.length() - 1; i >= 0; i--) {
+
+			dv = Integer.valueOf(str.substring(i, i + 1));
+
+			dv = dv * val;
+			
+		// Soma a dezena > 9
+			if (dv > 9) {
+				dv = (dv / 10) + (dv % 10);
+			}
+
+		// Altera de 1 ou 2
+			if (val == 2) {
+				val = 1;
+			} else
+				val = 2;
+
+			soma += dv;
+		}
+		
+		// Pega o resto da soma e divide por 5
+		dv = (((soma / 5) + 1) * 5) - soma;
+
+		if (dv == 10) {
+			return 0;
+		} else {
+			return dv;
 		}
 
-		int proximaDezena = ((soma / 10) + 1) * 10;
-		
-		int dvCampo = (proximaDezena - (proximaDezena - 10 + soma %10));
-		
-		if (dvCampo >= 10){
-			return 1;
-		}
-
-		return dvCampo;
 	}
 
 	/**
@@ -162,9 +176,23 @@ public abstract class BloquetoBBImpl implements BloquetoBB {
 	 * @return
 	 */
 	protected int digitoVerificadorCodigoBarras(String codigoBarras) {
-		// TODO: COMPLETAR
+		int soma = 0, dv = 2;
+		int tamanho = codigoBarras.length();
+		for (int i = tamanho - 1; i >= 0; i--) {
+			if (dv == 10) {
+				dv = 2;
+			}
+			soma += Integer.valueOf(codigoBarras.substring(i, i + 1)) * dv;
+			dv++;
+		}
+		int resto = soma % 11;
 
-		return 0;
+		dv = 11 - resto;
+		if (dv == 0 || dv == 10 || dv == 11) {
+			return 1;
+		} else {
+			return dv;
+		}
 	}
 
 	/**
